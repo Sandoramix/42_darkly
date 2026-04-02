@@ -1,6 +1,7 @@
 # /usr/bin/env python3
 
 # FOR PAGE: /?page=member
+# VULNERABILITY: SQL Injection with UNION SELECT QUERY
 
 # NEEDS:
 # pip install beautifulsoup4 requests
