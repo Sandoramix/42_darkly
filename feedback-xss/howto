@@ -1,0 +1,3 @@
+<form method="post" name="guestform" onsubmit="return validate_form(this)">
+modificare onsubmit
+
