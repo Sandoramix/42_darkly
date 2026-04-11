@@ -21,7 +21,7 @@ f = open("demofile.txt", "w")
 index = 0
 for file in files:
     #print(file)
-    if index == 100 :
+    if index == 100:
         time.sleep(1)
         index = 0
     if file.endswith('/') and not file.endswith('/../') :
