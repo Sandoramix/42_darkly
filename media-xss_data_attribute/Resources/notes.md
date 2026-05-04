@@ -14,3 +14,21 @@ we need to convert it to base64 (`PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==`), and th
 # Payload
 
 http://<ip>/?page=media&src=data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
+
+
+## How to prevent
+
+- Validate and restrict input
+Only allow trusted URL schemes (http, https)
+
+- Explicitly block dangerous schemes like:
+data:
+javascript:
+
+- Properly escape user input before injecting into HTML attributes
+
+- Use a strong CSP:
+
+Content-Security-Policy: default-src 'self'; object-src 'none';
+object-src 'none' disables <object> entirely
+Prevents execution of injected content
