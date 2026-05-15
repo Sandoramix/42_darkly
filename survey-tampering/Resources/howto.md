@@ -1,9 +1,13 @@
-# Survey Tampering
+# Survey Form Tampering
 
-By changing any \<select\>'s \<option\> value and then submitting the form, you can change get the flag.
+The survey form uses `<select>` dropdowns. The server accepts any value for the option,
+including values not present in the original HTML. Submitting a tampered value triggers the flag.
 
-This means that the server is blindly trusting the client which is very dangerous.
+## Exploit
+
+In browser DevTools, edit any `<option>` value to an arbitrary number and submit the form.
 
 ## How to prevent
 
-The solution is to have server-side validation of the form data.
+- Validate submitted values server-side against the set of allowed options
+- Never trust client-supplied form data — the server must be the source of truth for valid choices

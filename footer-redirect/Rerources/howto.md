@@ -1,10 +1,21 @@
-# ?redirect
+# Open Redirect
 
-The website has a footer with a link to the `?redirect=<social>` page, which is used to redirect the user to a social media page.
-The link is vulnerable to redirection, so if the user enters in `?redirect=<malicious_url>` the website will redirect the user to the malicious URL without any validation. This can cause a phishing attack (redirecting the user to a malicious website from a "trusted" origin).
+The footer contains social media links that use `?redirect=<site>` to redirect users.
+The `site` parameter is not validated, so any URL can be supplied, redirecting users to
+arbitrary external sites. This enables phishing by abusing a trusted origin.
 
-So if the user enters in `<IP>/http://index.php?page=redirect&site=https://projects.intra.42.fr/42cursus-darkly/mine` th flag will be rendered.
+## Exploit
 
-## Hot to prevent this
+Navigate to:
 
-Ideally the website should have a proper validation/whitelisting for authorized redirection URLs.
+```
+http://<IP>/index.php?page=redirect&site=https://projects.intra.42.fr/42cursus-darkly/mine
+```
+
+The flag is rendered on that page.
+
+## How to prevent
+
+- Whitelist allowed redirect targets (e.g. only `instagram`, `facebook`, `twitter`)
+- Reject or block any `site` value that is not in the whitelist
+- Never pass raw user input directly to a redirect function

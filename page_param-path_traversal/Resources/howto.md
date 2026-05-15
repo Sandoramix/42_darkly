@@ -1,19 +1,18 @@
-# Page param path traversal
+# Page Param Path Traversal
 
-`http://<ip>/?page=/../../../../../../../../../../../../../../etc/passwd`
+The `?page=` parameter is used to include files dynamically without sanitization. By injecting
+`../` sequences, an attacker can read arbitrary files on the server.
 
-The application includes files dynamically based on the page parameter without proper validation. By manipulating this parameter with directory traversal sequences (../), an attacker can access sensitive files on the server, such as /etc/passwd.
+## Exploit
 
-The application does not block sequences like ../, allowing navigation outside the intended directory.
-This works because the application blindly trusts user input when accessing the filesystem.
+```
+http://<IP>/?page=../../../../../../../../../../../etc/passwd
+```
+
+The server returns the contents of `/etc/passwd`.
 
 ## How to prevent
 
-- Validate and sanitize input
-Reject any input containing:
-../
-/
-null bytes (%00)
-
-- Use a fixed base directory
-Resolve paths safely and verify they stay within that directory
+- Validate `page` against an explicit allowlist of known page names
+- Reject any input containing `../`, `/`, or null bytes (`%00`)
+- Resolve the full path and verify it stays within the intended base directory before including

@@ -1,11 +1,21 @@
-# Page enumeration and password guessing
+# Admin Credentials Exposure
 
-At /robots.txt there is a link to a `whatever` route which contains a `htpasswd` file. Inside this file there are credentials for the `root`:`<hash>`.
+`/robots.txt` exposes a `whatever` route containing an `htpasswd` file with a hashed `root`
+password. The `/admin` route accepts these credentials to display the flag.
 
-By enumerating (guessing) the available pages on the website, there's a `/admin` route with a login form. By using the username `root` and decrypted password (online) `qwerty123@`, we can access the flag.
+## Exploit
 
-## Hot to prevent this
+1. Fetch `/robots.txt` → find the `whatever` path
+2. Fetch `/<whatever>/htpasswd` → copy the `root` hash
+3. Crack the hash (MD5) with hashcat or an online tool → `qwerty123@`
+4. Log in at `/admin` with `root` / `qwerty123@`
 
-Do not expose the `htpasswd` file, or at least do not allow access to it (auth by IP, auth by cookie, etc.).
+```bash
+hashcat -m 0 -a 0 <hash> rockyou.txt
+```
 
-<!-- TODO: add details on how to crack the hash with a command (bruteforce/wordlist with hashcat/john) -->
+## How to prevent
+
+- Never expose `htpasswd` or credential files via the web server
+- Restrict access to sensitive paths by IP or require prior authentication
+- Use a strong hashing algorithm (bcrypt, scrypt, PBKDF2) — MD5 is broken for passwords

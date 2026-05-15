@@ -1,20 +1,23 @@
 # Feedback XSS
 
-There is something wrong with the feedback form, it is not vulnerable to XSS but upon putting a specific single character in the `name` and `message` fields, the page will render the flag.
+The feedback form has a broken `strstr` check intended to block `<script>` tags. The parameters
+are swapped: instead of checking if `<script>` is present in the input, it checks if the input
+is present inside the string `<script>`. Any single character from `atcslerip<>` satisfies this
+check and causes the server to render the flag.
 
-Possible set of single characters that can be entered are: `atcslerip<>`
+## Exploit
 
-So if the user enters inside `name` `a` or `t` in `message` field the page will render the flag.
-
-<!-- <form method="post" name="guestform" onsubmit="return validate_form(this)">
-modificare onsubmit -->
-
+Enter any single character from `atcslerip<>` in the `name` or `message` field and submit.
 
 ## Intended Vulnerability
 
-This is a XSS vulnerability where you inject `<script>` JS code into the `name` or `message` fields. It doesn't work like this because on the server side the function used to check the input `strstr` has inverted the parameters and instead of checking if the string contains the substring (`<script>` is present inside the given input, e.g: `<script>alert(1)</script>`), it checks if the substring is contained in the string (if given input is present inside `<script>`, e.g. `s`).
+This is a stored XSS vulnerability. The intended exploit is to inject `<script>alert(1)</script>`
+into `name` or `message`. It fails because `strstr($input, "<script>")` has its arguments
+reversed — it tests whether the input exists inside the literal string `"<script>"`, not the
+other way around.
 
-## How to prevent this
+## How to prevent
 
-Do not allow the user to enter `<script>` in the `name` or `message` fields. There are many ways to do this, for example, you can use a whitelist of allowed characters, or you can "strip" (remove) all html elements from the input before saving it in the database.
-Or you can show the input as plaintext and not as html.
+- Strip or escape HTML from user input before saving to the database
+- Render user content as plaintext, not raw HTML
+- Use a whitelist of allowed characters for form fields

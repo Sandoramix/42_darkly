@@ -1,16 +1,26 @@
-# Directory enum
+# Directory Listing Enumeration
 
-The script recursively scans the .hidden directory and discovers files containing the flag by parsing directory listings and following all links.
-The web server exposes the contents of directories  instead of blocking access. This allows attackers to enumerate files and subdirectories.
+The web server exposes directory listings under `/.hidden/`. The script recursively follows
+all links, reads every file, and reports those containing the flag.
 
-## How to prevent this
+## Exploit
 
-- Disable directory listing
+```bash
+python3 pwn.py
+```
 
-Configure the web server to prevent listing files, for example:
-In Nginx:
+## How to prevent
+
+Disable directory listing on the web server:
+
+**Nginx:**
+```nginx
 autoindex off;
-In Apache HTTP Server:
-Options -Indexes
+```
 
-- Block access to .hidden entirely
+**Apache:**
+```apache
+Options -Indexes
+```
+
+Block access to `.hidden` entirely via server config or firewall rules.
