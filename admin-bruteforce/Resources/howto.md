@@ -7,3 +7,5 @@ By enumerating (guessing) the available pages on the website, there's a `/admin`
 ## Hot to prevent this
 
 Do not expose the `htpasswd` file, or at least do not allow access to it (auth by IP, auth by cookie, etc.).
+
+<!-- TODO: add details on how to crack the hash with a command (bruteforce/wordlist with hashcat/john) -->

