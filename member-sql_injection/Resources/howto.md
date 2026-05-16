@@ -15,6 +15,17 @@ python3 pwn.py
 ```
 
 1. Decode MD5 `5ff9d0165b4f92b14994e5c685cdce28` → `FortyTwo`
+
+   Use `bruteforcemd5.py` with a wordlist:
+
+   ```bash
+   python3 ../../bruteforcemd5.py 5ff9d0165b4f92b14994e5c685cdce28 rockyou.txt
+   ```
+
+   Recommended wordlists from [SecLists](https://github.com/danielmiessler/SecLists):
+   - `Passwords/Leaked-Databases/rockyou.txt`
+   - `Passwords/Most-Popular-Letter-Passes.txt`
+
 2. Lowercase: `fortytwo`
 3. SHA256 → flag
 

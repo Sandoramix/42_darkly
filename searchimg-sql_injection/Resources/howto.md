@@ -14,6 +14,17 @@ python3 pwn.py
 ```
 
 1. Decode MD5 `1928e8083cf461a51303633093573c46` → `albatroz`
+
+   Use `bruteforcemd5.py` with a wordlist:
+
+   ```bash
+   python3 ../../bruteforcemd5.py 1928e8083cf461a51303633093573c46 rockyou.txt
+   ```
+
+   Recommended wordlists from [SecLists](https://github.com/danielmiessler/SecLists):
+   - `Passwords/Leaked-Databases/rockyou.txt`
+   - `Passwords/Most-Popular-Letter-Passes.txt`
+
 2. Lowercase: `albatroz`
 3. SHA256 → flag
 

