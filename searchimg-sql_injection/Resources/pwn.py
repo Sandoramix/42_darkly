@@ -51,42 +51,27 @@ if content is None:
     print("No content found")
     exit(1)
 
-extra_table = content.find("table")
-if extra_table is not None:
-    extra_table.decompose()
-else:
-    print("No extra table found")
-    print(content.prettify())
-    exit(1)
 
-results = content.find_all("pre")
-if len(results) == 0:
-    print("No results found")
-    exit(1)
-
-formatted_results = []
-for item in results:
-    info = list(item.stripped_strings)
-    formatted_results.append((
-        info[1].replace("First name: ", ""),
-        info[2].replace("Surname :", ""),
-    ))
-
-max_size = max(max(len(j) for j in i) for i in formatted_results)
-beautify = "--clean" not in sys.argv
-
-if beautify:
-    for i, item in enumerate(formatted_results):
-        prefix = f"[{i + 1}]:"
-        pad = max(0, 69 - max_size - len(prefix))
-        print(f"{prefix}{' ' * (pad + 1)}|{item[1]}|")
-else:
+        info[1].replace("Title: ", ""),
+        info[2].replace("Url :", ""),
     for item in formatted_results:
         print(item[1])
 
-# FLAG DERIVATION:
+        print(f"{prefix}{' ' * (pad + 1)}|", end="")
+        for i in range(len(item)):
+            print(f"{item[i]}{' ' * (pad - len(item[i]) + 1)}|", end="")
+        info[1].replace("Title: ", ""),
+        info[2].replace("Url :", ""),
 # 1928e8083cf461a51303633093573c46 (MD5) -> "albatroz"
 # lowercase -> sha256 -> flag
 decrypted_md5 = "albatroz"
+        print(f"{prefix}{' ' * (pad + 1)}|", end="")
+        for i in range(len(item)):
+            print(f"{item[i]}{' ' * (pad - len(item[i]) + 1)}|", end="")
+        print()
 sha256_hash = hashlib.sha256(decrypted_md5.lower().encode()).hexdigest()
 print(f"\n[FLAG] sha256('{decrypted_md5}') = {sha256_hash}")
+        print(f"{prefix}{' ' * (pad + 1)}|", end="")
+        for i in range(len(item)):
+            print(f"{item[i]}{' ' * (pad - len(item[i]) + 1)}|", end="")
+        print()
